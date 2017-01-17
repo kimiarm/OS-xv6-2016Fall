@@ -1,4 +1,4 @@
-/ Test that fork fails gracefully.
+// Test that fork fails gracefully.
 // Tiny executable so that the limit can be filling the proc table.
 
 #include "types.h"
@@ -41,8 +41,8 @@ waittest(void)
       foo();
       exit();      
     }
-    waitx(&wTime,&rTime);
-    printf(1, "hi \n");
+    wait2(&wTime,&rTime);
+     printf(1, "hi \n");
     printf(1, "wTime: %d rTime: %d \n",wTime,rTime);
 
 }

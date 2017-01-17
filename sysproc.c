@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+
 int
 sys_fork(void)
 {
@@ -25,9 +26,9 @@ sys_wait(void)
   return wait();
 }
 
-// Added sys_waitx call to load parameters and calling waitx
+
 int 
-sys_waitx(void)
+sys_wait2(void)
 {
   int *wtime;
   int *rtime;
@@ -38,7 +39,17 @@ sys_waitx(void)
   if(argptr(1, (char**)&rtime, sizeof(int)) < 0)
     return -1;
 
-  return waitx(wtime, rtime);
+  return wait2(wtime, rtime);
+}
+
+
+
+int
+sys_nice(void)
+{
+
+return nice();
+
 }
 
 int
@@ -56,6 +67,15 @@ sys_getpid(void)
 {
   return proc->pid;
 }
+
+int
+sys_getppid(void)
+{
+if(proc->parent ==0)
+return 0;
+return proc->parent->pid;
+}
+
 
 int
 sys_sbrk(void)
@@ -76,7 +96,7 @@ sys_sleep(void)
 {
   int n;
   uint ticks0;
-  
+
   if(argint(0, &n) < 0)
     return -1;
   acquire(&tickslock);
@@ -98,9 +118,11 @@ int
 sys_uptime(void)
 {
   uint xticks;
-  
+
   acquire(&tickslock);
   xticks = ticks;
   release(&tickslock);
   return xticks;
 }
+
+
